@@ -45,8 +45,12 @@ module.exports = {
     },
     getPosts: (req, res) => {
         const db = req.app.get('db'); 
-        let posts = db.get_posts()
-        .then(posts => res.status(200).send(posts))
+        db.get_posts()
+        .then(posts => {
+            console.log(posts)
+            res.status(200).send(posts)
+        })
+        
         
     }
 }
