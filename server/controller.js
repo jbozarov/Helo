@@ -49,8 +49,13 @@ module.exports = {
         .then(posts => {
             console.log(posts)
             res.status(200).send(posts)
-        })
-        
-        
+        }) 
+    },
+    getOnePost: (req, res) => {
+        const db = req.app.get('db')
+        const {id} = req.params; 
+
+        db.get_single_post(id)
+        .then(post => res.status(200).send(post))
     }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'; 
 import { getUser } from '../../ducks/reducer'
+import { toggle } from '../../ducks/toggleReducer'
 import { connect } from 'react-redux'; 
 
 export class Auth extends Component {
@@ -24,6 +25,7 @@ export class Auth extends Component {
     async login () {
         console.log(this.props.history)
         const { username, password } = this.state;
+        this.props.toggle(true); 
         await axios.post('/api/auth/login', {username, password})
         .then(res=>{
             this.setState({loggedUser: res.data, username: '', password: ''})
@@ -69,4 +71,4 @@ export class Auth extends Component {
 
 const mapStateToProps = state => state; 
 
-export default connect(mapStateToProps, { getUser })(Auth); 
+export default connect(mapStateToProps, { getUser, toggle })(Auth); 

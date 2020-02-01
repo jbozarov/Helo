@@ -4,9 +4,7 @@ import '../../App.css'
 import { connect } from 'react-redux';
 
 export class Nav extends Component {
-    componentDidMount() {
-        
-    }
+   
 
     render(){
         console.log(this.props)

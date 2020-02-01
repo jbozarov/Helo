@@ -8,16 +8,27 @@ export class Dashboard extends Component {
 
         this.state = {
             posts: [],
-            cleched: ''
+            checked: true,
         }
     }
     componentDidMount() {
-        axios.get('/api/posts').then(res=>this.setState({posts: res.data }))
-        console.log(this.props.match.params)
+        this.update(); 
+    }
+    
+    update = () => axios.get('/api/posts').then(res=>this.setState({posts: res.data }))
+
+    filterTitle = e => this.setState({posts: this.state.posts.filter(val => val.title.includes(e.target.value))})
+
+    postView = id => {
+        this.props.history.push(`/post/${id}`)
     }
 
-    filterTitle = e => {
-        this.setState({posts: this.state.posts.filter(val => val.title.includes(e.target.value))})
+    checked = () => {
+        const { checked } = this.state; 
+        this.setState({checked: !checked })
+        if (checked) this.setState({posts: this.state.posts.filter( val => val.username === this.props.user.username )})
+        else this.update()
+        console.log( 'Checked value is: ', checked)
     }
 
     render() {
@@ -28,27 +39,29 @@ export class Dashboard extends Component {
                     <div>
                         <input placeholder='Search' style={{width: '300px'}} onChange={e=>this.filterTitle(e)}  />
                         <button>Search</button>
-                        <button>Reset</button>
+                        <button onClick={this.update} >Reset</button>
                     </div>
                     <input type='checkbox' onChange={this.checked} /> 
                 </span>
                 {this.state.posts.map(post=>(
-                  <div key={post.id} className='post' >
+                  <div key={post.id} className='post' onClick={()=>this.postView(post.id)} >
                     <img src={post.img} style={{width: '40px', height: '40px'}} /> 
                     <h3> {post.title} </h3>
                     <p> {post.title} </p>
                     <p> {post.username} </p>
                     <p> {post.user_id} </p>
                   </div>  
-                ))} 
-                
+                ))}
             </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-	return { user: state.reducer.user };
+	return { 
+        user: state.reducer.user, 
+        loggedIn: state.toggleReducer
+     };
 }
 
 export default connect(mapStateToProps)(Dashboard); 

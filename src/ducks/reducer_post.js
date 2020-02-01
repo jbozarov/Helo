@@ -18,6 +18,9 @@ export const post = (id, post) => {
 }
 
 
+
+
+
 export default function reducerPost(state = initialState, action) {
     const {type, payload} = action
     switch(type){
